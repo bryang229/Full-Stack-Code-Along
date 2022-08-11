@@ -5,6 +5,14 @@
 // 2) Look at both of the Classes NewUser and ExistingUser (extends what is that ?)
 // 3) Look at Users' generateUsers function
 
+// Firestore syntax (assume db is db from backend/app.js):
+// To get a snapshot (reference) of a collection you add .collection(collectionName) to either the db or the doc with a collection
+// let collection = db.collection(collectionName) 
+// To get a snapshot (reference) of a document you add .doc to a snapshot of a collection
+// To get the data out of that snapshot you add .get() to end of the snapshot
+// To create a doc you must first get a snapshot of the doc (as if it exists) and then use the .set() function
+
+
 class UserData {
     constructor(userJson,db) {
         this.username = userJson.username;
@@ -47,18 +55,74 @@ class UserData {
     }
 }
 
+//Returns a formatted JSON useful for our express app!
+function formatDBReturn(data){
+    return {
+        "results" : data
+    }
+}
+
+//Function that allows us to get json out of info
+function userDataToJson(username, email, password, firstName, lastName, age, dateRegistered, picture) {
+    return {
+        "username": username,
+        "email": email,
+        "password": password,
+        "firstName": firstName,
+        "lastName": lastName,
+        "age": age,
+        "dateRegistered": dateRegistered,
+        "picture": picture
+
+    }
+}
+
+// Class for handling our new users
+// extends makes NewUser a subclass of UserData meaning it can use it's functions and more!
+// Think of how all Lambos is a car but not all cars are Lambos
+class NewUser extends UserData {
+    constructor(userDataJson,db) {
+        super(userDataJson,db)
+        // super is the UserData class, class super() is the same as calling the constructor of UserData
+    }
+    // TODO 2a
+    // Use the super key word to create a getUser and json function here!
+    // Note: both getUser and json are predefined in UserData
+    // These functions return data so calling
+    // json(){}
+    // getUser(){}
+    // Create the setUser function, it will get a doc ref and use the .set() function
+    // .set() expects a json!
+    // setUser(){}
+    
+}
+
+class ExistingUser extends UserData {
+    constructor(userDataJson,db) {
+        super(userDataJson,db)
+    }
+    // TODO 2b
+    // Use the super key word to create a getUser and json function here!
+    // Note: both getUser and json are predefined in UserData
+    // These functions return data so calling
+    // json(){}
+    // getUser(){}
+}
+
+
+
 class Users {
     constructor(db) {
         this.db = db;
-        //Users as JSONs
+        // Users as JSONs
         this.userData = [];
-        //Users as user class
+        // Users as user class
         this.userArray = [];
-        //Amount of users in total
+        // Amount of users in total
         this.usersAmount = 0;
-        //Last user shown
+        // Last user shown
         this.index = 0;
-        //Function to load all our users from our DB
+        // Function to load all our users from our DB
         this.loadUsers();
         
     }
@@ -142,59 +206,4 @@ class Users {
 
 }
 
-//Returns a formatted JSON useful for our express app!
-function formatDBReturn(data){
-    return {
-        "results" : data
-    }
-}
-
-//Function that allows us to get json out of info
-function userDataToJson(username, email, password, firstName, lastName, age, dateRegistered, picture) {
-    return {
-        "username": username,
-        "email": email,
-        "password": password,
-        "firstName": firstName,
-        "lastName": lastName,
-        "age": age,
-        "dateRegistered": dateRegistered,
-        "picture": picture
-
-    }
-}
-
-// Class for handling our new users
-// extends makes NewUser a subclass of UserData meaning it can use it's functions and more!
-// Think of how all Lambos is a car but not all cars are Lambos
-class NewUser extends UserData {
-    constructor(userDataJson) {
-        super(userDataJson)
-        // super is the UserData class, class super() is the same as calling the constructor of UserData
-    }
-    // TODO 2a
-    // Use the super key word to create a getUser and json function here!
-    // Note: both getUser and json are predefined in UserData
-    // These functions return data so calling
-    // json(){}
-    // getUser(){}
-    
-}
-
-class ExistingUser extends UserData {
-    constructor(userDataJson) {
-        super(userDataJson)
-    }
-    // TODO 2b
-    // Use the super key word to create a getUser and json function here!
-    // Note: both getUser and json are predefined in UserData
-    // These functions return data so calling
-    // json(){}
-    // getUser(){}
-    // Create the setUser function, it will get a doc ref and use the .set() function
-    // .set() expects a json!
-    // setUser(){}
-}
-
-
-export {Users, formatDBReturn}    
+module.exports = {Users, formatDBReturn};

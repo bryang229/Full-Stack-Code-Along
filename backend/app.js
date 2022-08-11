@@ -2,26 +2,30 @@
 
 const express = require("express");  //Importing express (how we will host our backend)
 const cors = require("cors");  //Import cors (allows us to talk to backend easily)
-const bodyParser = require("body-parser")
-// New app using express module
-const app = express();
+const bodyParser = require("body-parser");
 const axios = require("axios"); //import axios for talking to APIs
 
-const url = "https://randomuser.me/api/"
+// New app using express module
+const app = express();
+
+const url = "https://randomuser.me/api/";
 
 //Setting up our app
 app.use(cors());  //Starting our app using cors
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-var serviceAccount = require("../key/random-user-test-backend-firebase-adminsdk-p73bp-5a291807b8")
+var serviceAccount = require("../key/PATHTOKEY")
 var admin = require("firebase-admin");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
+
+const db = admin.firestore();
+
 
 // Creating a global user
 let users;
@@ -33,8 +37,8 @@ function checkUserDef(){
     return users == null ? false : true;
 }
 
-const db = admin.firestore();
-
+// Example of a post to our backend app
+// axios.post("http://127.0.0.1:3000/dummyExmaple", {"key" : "value"});
 
 // TODO 4
 // req -> User sending my app the post request's data
