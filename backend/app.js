@@ -37,6 +37,10 @@ function checkUserDef(){
     return users == null ? false : true;
 }
 
+app.get('/', function (req,res){
+    res.send("Hello World!")
+})
+
 // Example of a post to our backend app
 // axios.post("http://127.0.0.1:3000/dummyExmaple", {"key" : "value"});
 
